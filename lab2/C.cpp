@@ -36,7 +36,7 @@ public:
         Node *current = this->head;
         while (current != nullptr && current->pNext != nullptr) {
             Node *temp = current->pNext;
-            current->pNext = current->pNext->pNext;
+            current->pNext = (current->pNext)->pNext;
             delete temp;
 
             Size--;
