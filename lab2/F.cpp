@@ -43,9 +43,9 @@ public:
             }   
             Node *newNode = new Node(data, previous->pNext);
             previous->pNext = newNode;
+            
+            Size++;
         }
-        
-        Size++;
     }
 
     void clear() {

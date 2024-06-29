@@ -1,6 +1,6 @@
-#include<iostream>
+#include<iostream>             
 using  namespace std;
-
+// implementation of a singly linked list
 template<typename T>
 class List {
 public:
@@ -34,6 +34,8 @@ public:
     }
 
     void pop_front() {
+        if (head == nullptr) return;
+
         Node *temp = head;
         head = head->pNext;
         delete temp;
@@ -42,6 +44,8 @@ public:
     }
 
     void pop_back() {
+        if (Size == 0) return;
+
         removeAt(Size - 1);
     }
 
@@ -55,9 +59,9 @@ public:
             }   
             Node *newNode = new Node(data, previous->pNext);
             previous->pNext = newNode;
+
+            Size++;
         }
-        
-        Size++;
     }
 
     void removeAt(int index) {
@@ -71,9 +75,9 @@ public:
             Node *toDelete = previous->pNext;
             previous->pNext = toDelete->pNext;
             delete toDelete;
+            
+            Size--;
         }
-
-        Size--;
     }
 
     void clear() {
