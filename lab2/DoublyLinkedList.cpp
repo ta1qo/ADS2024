@@ -79,20 +79,17 @@ public:
             push_back(data);
         } else {
             Node *ptr;
-
             if (Size / 2 >= index) {
                 ptr = this->head;
                 for (int i = 0; i < index - 1; i++) {
                     ptr = ptr->pNext;
                 }
-
             } else {
                 ptr = this->tail;
                 for (int i = Size - index; i > 0; i--) {
                     ptr = ptr->pPrev;
                 }
             }
-
             Node *newNode = new Node(data, ptr, ptr->pNext);
             (ptr->pNext)->pPrev = newNode;
             ptr->pNext = newNode;
@@ -101,21 +98,35 @@ public:
         }
     }
 
-    // void removeAt(int index) {
-    //     if (index == 0) {   
-    //         pop_front();
-    //     } else {
-    //         Node *previous = this->head;
-    //         for (int i = 0; i < index - 1; i++) {
-    //             previous = previous->pNext;
-    //         }   
-    //         Node *toDelete = previous->pNext;
-    //         previous->pNext = toDelete->pNext;
-    //         delete toDelete;
-    //     }
+    void removeAt(int index) {
+        if (index == 0) {   
+            pop_front();
+        } else if (index == Size - 1) {
+            pop_back();
+        } else {
+            Node *ptr;
+            if (Size / 2 >= index) {
+                ptr = this->head;
+                for (int i = 0; i < index - 1; i++) {
+                    ptr = ptr->pNext;
+                }
+            } else {
+                ptr = this->tail;
+                for (int i = Size - index; i > 0; i--) {
+                    ptr = ptr->pPrev;
+                }
+            }
+            Node *toDelete = ptr->pNext;
+            ptr->pNext = toDelete->pNext;
 
-    //     Size--;
-    // }
+            if (toDelete->pNext != nullptr) {
+                toDelete->pNext->pPrev = ptr;
+            }
+            delete toDelete;
+
+            Size--;
+        }
+    }
 
     void clear() {
         while (Size) {
@@ -164,7 +175,7 @@ int main() {
         dlst.push_back(data);
     }
 
-    dlst.insert(77, 3);
+    dlst.removeAt(4);
 
     for (int i = 0; i < dlst.GetSize(); i++) {
         cout << dlst[i] << ' ';
