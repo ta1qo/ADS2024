@@ -193,34 +193,74 @@ public:
         }
     }
 
-    void cyclic_left(int x) {    // 12345 => 51234
-        if (head == nullptr || head == tail) return; 
+    // void cyclic_left(int x) {    // 12345 => 51234
+    //     if (head == nullptr || head == tail) return; 
         
-        while (x--) {
-            Node *first = this->head;
-            head = head->pNext;
-            head->pPrev = nullptr;
+    //     while (x--) {
+    //         Node *first = this->head;
+    //         head = head->pNext;
+    //         head->pPrev = nullptr;
 
-            tail->pNext = first;
-            first->pPrev = tail;
-            first->pNext = nullptr;
-            tail = first;
+    //         tail->pNext = first;
+    //         first->pPrev = tail;
+    //         first->pNext = nullptr;
+    //         tail = first;
+    //     }
+    // }
+
+    void cyclic_left(int x) {
+        if (head == nullptr || head == tail || x == 0) return; 
+        
+        x %= Size;
+        if (x == 0) return;
+        
+        Node *new_head = this->head;
+        for (int i = 0; i < x; ++i) {
+            new_head = new_head->pNext;
         }
+        
+        Node *new_tail = new_head->pPrev;
+        new_tail->pNext = nullptr;
+        new_head->pPrev = nullptr;
+        tail->pNext = head;
+        head->pPrev = tail;
+        head = new_head;
+        tail = new_tail;
     }
 
-    void cyclic_right(int x) {   // 12345 => 23451
-        if (head == nullptr || head == tail) return;
+    // void cyclic_right(int x) {   // 12345 => 23451
+    //     if (head == nullptr || head == tail) return;
         
-        while (x--) {
-            Node *last = this->tail;
-            tail = tail->pPrev;
-            tail->pNext = nullptr;
+    //     while (x--) {
+    //         Node *last = this->tail;
+    //         tail = tail->pPrev;
+    //         tail->pNext = nullptr;
 
-            last->pNext = head;
-            head->pPrev = last;
-            last->pPrev = nullptr;
-            head = last;
+    //         last->pNext = head;
+    //         head->pPrev = last;
+    //         last->pPrev = nullptr;
+    //         head = last;
+    //     }
+    // }
+
+    void cyclic_right(int x) {
+        if (head == nullptr || head == tail || x == 0) return;
+
+        x %= Size;
+        if (x == 0) return;
+        
+        Node *new_tail = this->tail;
+        for (int i = 0; i < x; ++i) {
+            new_tail = new_tail->pPrev;
         }
+
+        Node *new_head = new_tail->pNext;
+        new_tail->pNext = nullptr;
+        new_head->pPrev = nullptr;
+        tail->pNext = head;
+        head->pPrev = tail;
+        head = new_head;
+        tail = new_tail;
     }
 
     void clear() {
