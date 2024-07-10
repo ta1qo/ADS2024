@@ -8,11 +8,8 @@ bool can_cover(int arr[][4], int n, int l, int k) {
         if (arr[i][2] <= l && arr[i][3] <= l) {
             cnt++;
         }
-        if (cnt >= k) {
-            return true;
-        }
     }
-    return false;
+    return cnt >= k;
 }
 
 int binary_search(int arr[][4], int n, int k) {
