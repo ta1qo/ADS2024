@@ -62,7 +62,9 @@ private:
         if (current == nullptr) {
             size++; return new Node(data); 
         }
-        return (data < current->data) ? insert(current->left, data) : insert(current->right, data);
+        if (data < current->data) current->left = insert(current->left, data);
+        else if (data > current->data) current->right = insert(current->right, data);
+        return current;
     }
 
     Node* search(Node* current, T data) const {
