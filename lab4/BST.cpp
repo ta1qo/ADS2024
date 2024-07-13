@@ -107,7 +107,7 @@ private:
         return current;
     }
 
-    void print_tree(Node* current) {
+    void print_tree(Node* current) const {
         if (current == nullptr) return;
         print_tree(current->left);
         cout << current->data << " ";
