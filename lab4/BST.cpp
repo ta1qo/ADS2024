@@ -87,8 +87,8 @@ private:
 
     Node* delete_node(Node* current, T data) {
         if (current == nullptr) return nullptr;
-        else if (data < current->data) current->left = remove(current->left, data);
-        else if (data > current->data) current->right = remove(current->right, data);
+        else if (data < current->data) current->left = delete_node(current->left, data);
+        else if (data > current->data) current->right = delete_node(current->right, data);
         else {
             if (current->left == nullptr) {
                 Node* temp = current->right;
@@ -101,7 +101,7 @@ private:
             } else {
                 Node* maxInLeft = get_max(current->left);
                 current->data = maxInLeft->data;
-                current->left = remove(current->left, maxInLeft->data);
+                current->left = delete_node(current->left, maxInLeft->data);
             }
         }
         return current;
