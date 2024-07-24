@@ -11,10 +11,10 @@ bool check(char a, char b) {
 }
 
 int partition(char arr[], int left, int right) {
-    int pivot = arr[right];
+    char pivot = arr[right];
     int i = (left-1);
     for (int j = left; j <= right-1; j++) {
-        if (check(arr[j], arr[pivot])) {
+        if (check(arr[j], pivot)) {
             i++;
             swap(arr[i], arr[j]);
         }
