@@ -1,11 +1,11 @@
 #include<iostream>
 #include<string>
-using  namespace std;
+using namespace std;
 
 template<typename T>
 class List {
 public:
-    List() : Size(0), head(nullptr) {}
+    List() : Size(0), head(nullptr), tail(nullptr) {}
 
     ~List() { 
         clear(); 
@@ -16,16 +16,13 @@ public:
     }
 
     void push_back(T data) {
+        Node *current = new Node(data);
         if (head == nullptr) {
-            head = new Node(data);
+            head = tail = current;
         } else {
-            Node *current = this->head;
-            while (current->pNext != nullptr) {
-                current = current->pNext;
-            }
-            current->pNext = new Node(data);
+            tail->pNext = current;
+            tail = current;
         }
-
         Size++;
     }
 
@@ -79,6 +76,7 @@ private:
 
     int Size;
     Node *head;
+    Node *tail;
 };
 
 

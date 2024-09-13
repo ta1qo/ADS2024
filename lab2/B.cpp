@@ -4,36 +4,22 @@ using  namespace std;
 template<typename T>
 class List {
 public:
-    List() : Size(0), head(nullptr) {}
-
-    ~List() { 
-        clear(); 
-    }
-
-    int GetSize() const {
-        return Size;
-    }
+    List() : head(nullptr), tail(nullptr) {}
 
     void push_back(T data) {
+        Node *current = new Node(data);
         if (head == nullptr) {
-            head = new Node(data);
+            head = tail = current;
         } else {
-            Node *current = this->head;
-            while (current->pNext != nullptr) {
-                current = current->pNext;
-            }
-            current->pNext = new Node(data);
+            tail->pNext = current;
+            tail = current;
         }
-
-        Size++;
     }
 
     void pop_front() {
         Node *temp = head;
         head = head->pNext;
         delete temp;
-
-        Size--;
     }
 
     void shiftedBy(int k) {
@@ -43,27 +29,14 @@ public:
         }
     }
 
-    void clear() {
-        while (Size) {
-            Node *temp = head;
-            head = head->pNext;
-            delete temp;
-
-            Size--;
-        }
-    }
-
-    T &operator[](const int index) {
-        int counter = 0;
-        Node *current = this->head;
-        while (current != nullptr) {
-            if (counter == index) {
-                return current->data;
-            }
+    void print() {
+        Node *current = head;
+        while (current != NULL) {
+            cout << current->data << " ";
             current = current->pNext;
-            counter++;
         }
-    }
+        cout << endl;
+    } 
 
 private:
     class Node {
@@ -77,8 +50,8 @@ private:
         }
     };
 
-    int Size;
     Node *head;
+    Node *tail;
 };
 
 int main() {
@@ -94,9 +67,7 @@ int main() {
 
     lst.shiftedBy(k);
 
-    for (int i = 0; i < lst.GetSize(); i++) {
-        cout << lst[i] << ' ';
-    }
+    lst.print();
 
     return 0;
 }

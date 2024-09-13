@@ -4,35 +4,24 @@ using namespace std;
 template<typename t>
 class list {
 public: 
-    list() : size(0), head(nullptr) {}
-    ~list() {
-        clear();
-    }
-
-    int getsize() const {
-        return size;
-    }
+    list() : head(nullptr), tail(nullptr) {}
 
     void push_back(t data) {
+        node *current = new node(data, head);
         if (head == nullptr) {
-            head = new node(data, head);
+            head = tail = current;
         } else {
-            node *current = this->head;
-            while (current->pnext != nullptr) {
-                current = current->pnext;
-            }
-            current->pnext = new node(data);
+            tail->pnext = current;
+            tail = current;
         }
-
-        size++;
     }
 
-    int nearestTo(t k) {
-        int difference = INT_MAX;
+    int nearestTo(t k, int n) {
+        int difference = 99999;
         int offset = 0;
         node *current = this->head;
 
-        for (int i = 0; i < getsize(); i++) {
+        for (int i = 0; i < n; i++) {
             int value = abs(current->data - k);
             if (difference > value) {
                 difference = value;
@@ -42,28 +31,6 @@ public:
         }
 
         return offset;
-    }
-
-    void clear() {
-        while (size) {
-            node *temp = head;
-            head = head->pnext;
-            delete temp;
-
-            size--;
-        }
-    }
-
-    t &operator[](const int index) {
-        int counter = 0;
-        node *current = this->head;
-        while (current != nullptr) {
-            if (counter == index) {
-                return current->data;
-            }
-            current = current->pnext;
-            counter++;
-        }
     }
 
 private:
@@ -78,8 +45,8 @@ private:
         }
     };
 
-    int size;
     node *head;
+    node *tail;
 };
 
 int main() {
@@ -96,7 +63,8 @@ int main() {
     int k;
     cin >> k;
 
-    int offset = lst.nearestTo(k);
+    int offset = lst.nearestTo(k, n);
     cout << offset;
 
     return 0;
+}
