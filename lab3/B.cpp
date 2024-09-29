@@ -1,41 +1,38 @@
 #include <iostream>
-#include <vector>
 #include <algorithm>
+#define ll long long
 using namespace std;
 
-bool canPartition(const vector<int>& v, int mid, int k) {
-    int cnt = 1, sum = 0;
-    for (int i = 0; i < v.size(); i++) {
-        sum += v[i];
+bool canPartition(ll arr[], ll n, ll mid, ll k) {
+    ll cnt = 0, sum = 0;
+    for (ll i = 0; i < n; i++) {
+        sum += arr[i];
         if (sum > mid) {
             cnt++;
-            if (cnt > k) {
-                return false;
-            }
-            sum = v[i];
+            sum = arr[i];
         }
     }
-    return true;
+    return cnt + 1 <= k;
 }
 
 int main() {
-    int n, k;
+    ll n, k;
     cin >> n >> k;
     
-    vector<int> v(n);
-    int sum = 0;
-    for (int i = 0; i < n; i++) {
-        cin >> v[i];
-        sum += v[i];
+    ll arr[n];
+    ll sum = 0;
+    for (ll i = 0; i < n; i++) {
+        cin >> arr[i];
+        sum += arr[i];
     }
 
-    int left = *max_element(v.begin(), v.end());
-    int right = sum;
-    int min_poss_max = sum;
+    ll left = *max_element(arr, arr + n);
+    ll right = sum;
+    ll min_poss_max = sum;
 
     while (left <= right) {
-        int mid = left + (right - left) / 2;
-        if (canPartition(v, mid, k)) {
+        ll mid = left + (right - left) / 2;
+        if (canPartition(arr, n, mid, k)) {
             min_poss_max = mid;
             right = mid - 1;
         } else {
