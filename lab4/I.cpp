@@ -1,117 +1,115 @@
 #include <iostream>
-#include <string>
+
 using namespace std;
 
-template<typename T>
-class BST {
-public: 
-    BST() : size(0), root(nullptr) {}
-    ~BST() {
-        clear(root);
-    }
+struct Node {
+	int data;
+    int mult;
+	Node* left;
+	Node* right;
 
-    int get_size() {
-        return size;
-    }
-
-    void insert(T data) {
-        root = insert(root, data);
-    }
-
-    int get_multiplicity(T data) const {
-        Node* current = search(root, data);
-        return (current) ? current->mult : 0;
-    }
-
-    void delete_node(T data) {
-        root = delete_node(root, data);
-    }
-
-private:
-    class Node {
-    public:
-        T data;
-        Node* left;
-        Node* right;
-        int mult;
-
-        Node(T data = T(), Node* left = nullptr, Node* right = nullptr) {
-            this->data = data;
-            this->left = left;
-            this->right = right;
-            this->mult = 1;
-        }
-    };
-
-    int size;
-    Node* root;
-
-    Node* insert(Node* current, T data) {
-        if (current == nullptr) {
-            size++; return new Node(data); 
-        }
-        if (data == current->data) current->mult += 1;
-        else if (data < current->data) current->left = insert(current->left, data);
-        else if(data > current->data) current->right = insert(current->right, data);
-        return current;
-    }
-
-    Node* search(Node* current, T data) const {
-        if (current == nullptr) return nullptr;
-        if (current->data == data) return current;
-        return (data < current->data) ? search(current->left, data) : search(current->right, data);
-    }
-
-    Node* get_max(Node* current) const {
-        if (current == nullptr) return nullptr;
-        if (current->right == nullptr) return current;
-        return get_max(current->right);
-    }
-
-    Node* delete_node(Node* current, T data) {
-        if (current == nullptr) return nullptr;
-        else if (data < current->data) current->left = delete_node(current->left, data);
-        else if (data > current->data) current->right = delete_node(current->right, data);
-        else {
-            if (current->mult > 1) {
-                current->mult -= 1;
-                return current;
-            }
-            if (current->left == nullptr) {
-                Node* temp = current->right;
-                delete current; size--;
-                return temp;
-            } else if (current->right == nullptr) {
-                Node* temp = current->left;
-                delete current; size--;
-                return temp;
-            } else {
-                Node* maxInLeft = get_max(current->left);
-                current->data = maxInLeft->data;
-                current->mult = 1;
-                current->left = delete_node(current->left, maxInLeft->data);
-            }
-        }
-        return current;
-    }
-
-    void clear(Node* current) {
-        if (current == nullptr) return;
-        clear(current->left);
-        clear(current->right);
-        delete current;
-    }
+	Node(int data) {
+		this->data = data;
+        this->mult = 1;
+		left = NULL;
+		right = NULL;
+	} 
 };
+
+Node* getMin(Node* root) {
+	while (root->left != NULL) {
+		root = root->left;
+	}
+	return root;
+}
+
+Node* add(Node* root, int data) {
+	if (root == NULL) {
+		return new Node(data);
+	}
+     else if (root->data == data) {
+        root->mult += 1;
+    }
+     else if (root->data > data) {
+		if (root->left == NULL) {
+			root->left = new Node(data);
+		} else {
+			root->left = add(root->left, data);
+		}
+	} else if (root->data < data) {
+		if (root->right == NULL) {
+			root->right = new Node(data);
+		} else {
+			root->right = add(root->right, data);
+		}
+	}
+	return root;
+}
+
+Node* deleteNode(Node* root, int data) {
+	if (root == NULL) {
+		return NULL;
+	} else if (root->data > data) {
+		root->left = deleteNode(root->left, data);
+		return root;
+	} else if (root->data < data) {
+		root->right = deleteNode(root->right, data);
+		return root;
+	} else if (root->mult == 0) {
+		if (root->left == NULL && root->right == NULL) {
+			delete root;
+			return NULL;
+		} else if (root->right == NULL) {
+			Node* temp = root->left;
+			delete root;
+			return temp;
+		} else if (root->left == NULL) {
+			Node* temp = root->right;
+			delete root;
+			return temp;
+		} else {
+			Node* temp = getMin(root->right);
+			root->data = temp->data;
+			root->right = deleteNode(root->right, temp->data);
+			return root;
+		}
+	}
+    else {
+        root->mult -= 1;
+        return root;
+    }
+}
+
+Node* find(Node* root, int x) {
+	if (root == NULL) {
+		return NULL;
+	} else if (root->data == x) {
+		return root;
+	} else if (root->data < x) {
+		return find(root->right, x);
+	} else {
+		return find(root->left, x);
+	}
+}
 
 int main() {
     int n; cin >> n;
-    BST<int> bst;
-    while (n--) {
+    Node *root = NULL;
+    for(int i = 0; i < n; i++) {
         string s; cin >> s;
         int x; cin >> x;
-        if (s == "insert") bst.insert(x);
-        else if (s == "delete") bst.delete_node(x);
-        else if (s == "cnt") cout << bst.get_multiplicity(x) << endl;
+        if (s == "insert") {
+            root = add(root, x);
+        }
+        if (s == "cnt") {
+            Node *found = find(root, x);
+            if(found == NULL)
+                cout << 0 << "\n";
+            else
+                cout << found->mult << "\n";
+        }
+        if (s == "delete") {
+            deleteNode(root, x);
+        }
     }
-    return 0;
 }
