@@ -7,7 +7,7 @@ using namespace std;
 const ll p = 31;
 
 long long get_hash(string s) {
-    ll h = 0,
+    ll h = 0;
     for (int i = 0; i < s.size(); i++) {
         h = (h * p + (s[i] - 'a' + 1));
     }
