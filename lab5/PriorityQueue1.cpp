@@ -20,7 +20,7 @@ struct PriorityQueue {
     void heapifyDown(int i) {
         int l = left(i);
         int r = right(i);
-        int max = i;
+        int max = i;    
         int size = heap.size();
         if (l < size && heap[max] < heap[l]) max = l;
         if (r < size && heap[max] < heap[r]) max = r;

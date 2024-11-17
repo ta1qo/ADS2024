@@ -1,4 +1,4 @@
-#include<iostream>
+#include<iostream>// run time error. not passed
 using  namespace std;
 
 template<typename T>
@@ -129,38 +129,51 @@ public:
     }
 
     void replace(int p1, int p2) {
-        if (p1 >= Size || p2 >= Size) return;
-
+        if (p1 == p2) return;  
+        
         Node *ptr1 = this->head;
+        for (int i = 0; i < p1; ++i) {
+            if (ptr1 == nullptr) return; 
+            ptr1 = ptr1->pNext;
+        }
+
+        if (ptr1 == nullptr) return;
+
+        if (ptr1->pPrev != nullptr) {
+            ptr1->pPrev->pNext = ptr1->pNext;
+        } else {
+            head = ptr1->pNext;  
+        }
+
+        if (ptr1->pNext != nullptr) {
+            ptr1->pNext->pPrev = ptr1->pPrev;
+        }
+
         Node *ptr2 = this->head;
-
-        if (Size / 2 >= p1) {
-            ptr1 = this->head;
-            for (int i = 0; i < p1; i++) {
-                ptr1 = ptr1->pNext;
-            }
-        } else {
-            ptr1 = this->tail;
-            for (int i = Size - 1; i > p1; i--) {
-                ptr1 = ptr1->pPrev;
-            }
+        for (int i = 0; i < p2; ++i) {
+            if (ptr2 == nullptr) return;
+            ptr2 = ptr2->pNext;
         }
 
-        if (Size / 2 >= p2) {
-            ptr2 = this->head;
-            for (int i = 0; i < p2; i++) {
-                ptr2 = ptr2->pNext;
+        if (ptr2 == nullptr) { 
+            Node *current = head;
+            while (current->pNext != nullptr) {
+                current = current->pNext;
             }
-        } else {
-            ptr2 = this->tail;
-            for (int i = Size - 1; i > p2; i--) {
-                ptr2 = ptr2->pPrev;
-            }
+            current->pNext = ptr1;
+            ptr1->pPrev = current;
+            ptr1->pNext = nullptr;
+        } else if (ptr2 == head) {
+            ptr1->pNext = head;
+            head->pPrev = ptr1;
+            ptr1->pPrev = nullptr;
+            head = ptr1;
+        } else {  
+            ptr1->pNext = ptr2;
+            ptr1->pPrev = ptr2->pPrev;
+            ptr2->pPrev->pNext = ptr1;
+            ptr2->pPrev = ptr1;
         }
-
-        T temp = ptr1->data;
-        ptr1->data = ptr2->data;
-        ptr2->data = temp;
     }
 
     void print() {

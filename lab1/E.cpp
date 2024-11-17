@@ -11,6 +11,7 @@ void drunkard_card_game(deque<int> d1, deque<int> d2) {
         int card2 = d2.front();
         d1.pop_front();
         d2.pop_front();
+        
 
         if ((card1 == 0 && card2 == 9) || (card1 > card2 && !(card1 == 9 && card2 == 0))) {
             d1.push_back(card1);
